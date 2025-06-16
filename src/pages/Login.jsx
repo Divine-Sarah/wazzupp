@@ -1,19 +1,91 @@
 
-import React from 'react';
+import React, {useState} from 'react';
 import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import { FaGoogle, FaCheckCircle } from 'react-icons/fa';
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+// import { FaGoogle, FaCheckCircle } from 'react-icons/fa';
+// import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 export default function Login() {
+
+ const [formData, setFormData] = useState({
+  email: "",
+  password:"",
+ })
+
+ 
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("")
+  
+
+   
+
+  const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData((prev) => ({ ...prev, [name]: value }));
+
+  if (name === 'email') {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setEmailError(
+      value && !emailPattern.test(value) ? 'Enter a valid email' : ''
+    );
+  }
+
+  if (name === 'password') {
+    setPasswordError(
+      value.length < 8 ? 'Password must be at least 8 characters' : ''
+    );
+  }
+}
+
+const handleSubmit = (e) => {
+  e.preventDefault(); // prevents page reload
+
+  // simple validation
+  const { email, password } = formData;
+
+  let valid = true;
+
+  if (!email) {
+    setEmailError('Email is required');
+    valid = false;
+  }
+
+  if (!password) {
+    setPasswordError('Password is required');
+    valid = false;
+  }
+
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    setEmailError('Enter a valid email');
+    valid = false;
+  }
+
+  if (password && password.length < 8) {
+    setPasswordError('Password must be at least 8 characters');
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  // If all is valid, proceed
+  console.log('Submitting form:', formData);
+
+  // Simulate login
+  alert('Logged in successfully!');
+};
+
+
   return (
     <>
     <div className=' bg-white md:space-y-[123px] space-y-[50px] flex flex-col'>
       <div className='app-container alex-brush font-bold md:text-4xl text-2xl'>WazzUpp</div>
 
-      <div className="w-full max-w-md m-auto px-4">
+      <div className="w-full max-w-md md:m-auto px-6 md:px-0 md:space-y-[50px]">
+        
+        <div>
         <h2 className="text-2xl font-semibold text-gray-900 text-center pb-[9px]">Welcome Back</h2>
-        <p className="text-sm text-gray-500 mb-6 text-center pb-[50px]">Welcome back! Please enter your details</p>
+        <p className="text-sm text-gray-500 mb-6 text-center ">Welcome back! Please enter your details</p>
+        </div>
 
         <div className='space-y-[30px]'>
                 {/* Google Login Button */}
@@ -30,7 +102,7 @@ export default function Login() {
                   <div className="flex-grow border-t border-gray-200"></div>
                 </div>
 
-                <form action="">
+                <form onSubmit={handleSubmit}>
                         {/* Email */}
                         <div className="mb-4">
                           <label className="block text-sm text-gray-700 mb-1">Email address</label>
@@ -38,16 +110,15 @@ export default function Login() {
                             <MdEmail className="text-gray-400 w-5 h-5 mr-2" />
                             <input
                               type="email"
-                              className="w-full border-none outline-none text-sm"
-                              placeholder="lima.sadie87@gmail.com"
-                              defaultValue="lima.sadie87@gmail.com"
+                              className="w-full border-none outline-none text-base "                              placeholder="lima.sadie87@gmail.com"
+                              name="email"
+                              value={formData.email}
+                              onChange={handleChange}
                             />
-                            <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" strokeWidth="2"
-                              viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round"
-                                d="M5 13l4 4L19 7" />
-                            </svg>
                           </div>
+                             {emailError && (
+                                <p className="text-red-500 text-xs mt-1">{emailError}</p>
+                              )}
                         </div>
 
                         {/* Password */}
@@ -57,15 +128,17 @@ export default function Login() {
                             <RiLockPasswordLine className="text-gray-400 w-5 h-5 mr-2" />
                             <input
                               type="password"
-                              className="w-full border-none outline-none text-sm"
+                              className="w-full border-none outline-none text-base bg-transparent"
                               placeholder="Min. 8 characters"
+                              name="password"
+                              value={formData.password}
+                              onChange={handleChange}
                             />
-                            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2"
-                              viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round"
-                                d="M15 12h.01M12 12h.01M9 12h.01M12 12v.01M12 15v.01" />
-                            </svg>
+                          
                           </div>
+                          {passwordError && (
+                                <p className="text-red-500 text-xs mt-1">{passwordError}</p>
+                              )}
                         </div>
 
                         {/* Remember and Forgot */}
@@ -78,7 +151,7 @@ export default function Login() {
                         </div>
 
                         {/* Login Button */}
-                        <button className="w-full bg-[#FBAD04] text-black font-medium py-3 rounded-xl hover:bg-yellow-500 transition">
+                        <button   type="submit" className="w-full bg-[#FBAD04] text-black font-medium py-3 rounded-xl hover:bg-yellow-500 transition">
                           Log In
                         </button>
 
@@ -101,3 +174,4 @@ export default function Login() {
       </>
   );
 }
+
