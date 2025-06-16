@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush:wght@200;400;700&family=Lato:wght@100&display=swap');
+@import "tailwindcss";
+
+
+.app-container {
+    @apply xl:px-[65px] pt-[40px] w-full md:px-[30px] px-4
+}
+
+.alex-brush {
+  font-family: 'Alex Brush', cursive;
+}
