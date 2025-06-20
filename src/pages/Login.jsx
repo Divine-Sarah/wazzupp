@@ -2,8 +2,12 @@
 import React, {useState} from 'react';
 import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
+import { useNavigate } from 'react-router-dom';
 // import { FaGoogle, FaCheckCircle } from 'react-icons/fa';
 // import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import {auth} from '../firebase/config'
+// import { doc, setDoc, getFirestore } from "firebase/firestore";
 
 export default function Login() {
 
@@ -13,11 +17,11 @@ export default function Login() {
  })
 
  
+
+  const navigate = useNavigate();
+
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("")
-  
-
-   
 
   const handleChange = (e) => {
   const { name, value } = e.target;
@@ -37,42 +41,41 @@ export default function Login() {
   }
 }
 
-const handleSubmit = (e) => {
-  e.preventDefault(); // prevents page reload
+  const handleLogin = async (e) => {
+    e.preventDefault(); // prevent form reload
+    
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      let valid = true;
 
-  // simple validation
-  const { email, password } = formData;
-
-  let valid = true;
-
-  if (!email) {
+  if (!formData.email) {
     setEmailError('Email is required');
     valid = false;
   }
 
-  if (!password) {
+  if (!formData.password) {
     setPasswordError('Password is required');
     valid = false;
   }
 
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
     setEmailError('Enter a valid email');
     valid = false;
   }
 
-  if (password && password.length < 8) {
+  if (formData.password && formData.password.length < 8) {
     setPasswordError('Password must be at least 8 characters');
     valid = false;
   }
 
   if (!valid) return;
-
-  // If all is valid, proceed
-  console.log('Submitting form:', formData);
-
-  // Simulate login
-  alert('Logged in successfully!');
-};
+      console.log('Logged in:', userCredential.user);
+      navigate('/chat');
+    } catch (error) {
+      console.error(error.message);
+      alert('Login failed');
+    }
+  };
 
 
   return (
@@ -102,7 +105,7 @@ const handleSubmit = (e) => {
                   <div className="flex-grow border-t border-gray-200"></div>
                 </div>
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleLogin}>
                         {/* Email */}
                         <div className="mb-4">
                           <label className="block text-sm text-gray-700 mb-1">Email address</label>
@@ -110,7 +113,8 @@ const handleSubmit = (e) => {
                             <MdEmail className="text-gray-400 w-5 h-5 mr-2" />
                             <input
                               type="email"
-                              className="w-full border-none outline-none text-base "                              placeholder="lima.sadie87@gmail.com"
+                              className="w-full border-none outline-none text-base "                           
+                              placeholder="lima.sadie87@gmail.com"
                               name="email"
                               value={formData.email}
                               onChange={handleChange}
