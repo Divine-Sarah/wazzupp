@@ -3,11 +3,10 @@ import React, {useState} from 'react';
 import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
-// import { FaGoogle, FaCheckCircle } from 'react-icons/fa';
-// import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import {auth} from '../firebase/config'
-// import { doc, setDoc, getFirestore } from "firebase/firestore";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
+import {auth, db} from '../firebase/config'
+import { doc, setDoc } from "firebase/firestore";
+
 
 export default function Login() {
 
@@ -16,7 +15,6 @@ export default function Login() {
   password:"",
  })
 
- 
 
   const navigate = useNavigate();
 
@@ -41,41 +39,77 @@ export default function Login() {
   }
 }
 
-  const handleLogin = async (e) => {
-    e.preventDefault(); // prevent form reload
-    
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
-      let valid = true;
+const handleLoginOrSignup = async (e) => {
+  e.preventDefault();
+
+  // 🔍 Form validation (as before)
+  let valid = true;
 
   if (!formData.email) {
-    setEmailError('Email is required');
+    setEmailError("Email is required");
     valid = false;
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    setEmailError("Enter a valid email");
+    valid = false;
+  } else {
+    setEmailError("");
   }
 
   if (!formData.password) {
-    setPasswordError('Password is required');
+    setPasswordError("Password is required");
     valid = false;
-  }
-
-  if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-    setEmailError('Enter a valid email');
+  } else if (formData.password.length < 8) {
+    setPasswordError("Password must be at least 8 characters");
     valid = false;
-  }
-
-  if (formData.password && formData.password.length < 8) {
-    setPasswordError('Password must be at least 8 characters');
-    valid = false;
+  } else {
+    setPasswordError("");
   }
 
   if (!valid) return;
-      console.log('Logged in:', userCredential.user);
-      navigate('/chat');
-    } catch (error) {
-      console.error(error.message);
-      alert('Login failed');
+
+  try {
+  const userCredential = await signInWithEmailAndPassword(
+    auth,
+    formData.email,
+    formData.password
+  );
+  const user = userCredential.user;
+  navigate("/chat");
+
+} catch (error) {
+  console.error("Login error code:", error.code);
+
+  if (error.code === "auth/user-not-found") {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+
+      const user = userCredential.user;
+
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        displayName: "New User",
+        role: "user",
+      });
+
+      console.log("Account created:", user.email);
+      navigate("/chat");
+
+    } catch (signupError) {
+      console.error("Signup failed:", signupError.code, signupError.message);
+      alert("Signup failed: " + signupError.message);
     }
-  };
+
+  } else {
+    alert("Login failed: " + error.message);
+  }
+}
+};
+
 
 
   return (
@@ -105,7 +139,7 @@ export default function Login() {
                   <div className="flex-grow border-t border-gray-200"></div>
                 </div>
 
-                <form onSubmit={handleLogin}>
+                <form onSubmit={handleLoginOrSignup}>
                         {/* Email */}
                         <div className="mb-4">
                           <label className="block text-sm text-gray-700 mb-1">Email address</label>
