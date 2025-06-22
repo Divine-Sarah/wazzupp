@@ -48,7 +48,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import defaultAvatar from "../assets/avatar.jpg";
 import { formatTimestamp } from "../utils/formatTimeStamp";
 import { RiSendPlaneFill } from "react-icons/ri";
-import { messageData } from "../data/messageData";
+// import { messageData } from "../data/messageData";
 import { auth, listenForMessages, sendMessage } from "../firebase/config";
 
 
@@ -110,8 +110,8 @@ const Chatbox = ({ selectedUser }) => {
                                 <img src={selectedUser?.image || defaultAvatar} className="w-11 h-11 object-cover rounded-full" alt="" />
                             </span>
                             <span>
-                                <h3 className="font-semibold text-[#2A3D39] text-lg">{selectedUser?.fullName || "Chatfrik User"}</h3>
-                                <p className="font-light text-[#2A3D39] text-sm">@{selectedUser?.username || "chatfrik"}</p>
+                                <h3 className="font-semibold text-[#2A3D39] text-lg">{selectedUser?.fullName || "WazzUpp User"}</h3>
+                                <p className="font-light text-[#2A3D39] text-sm">@{selectedUser?.username || "wazzUpp"}</p>
                             </span>
                         </main>
                     </header>

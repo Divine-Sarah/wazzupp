@@ -1,5 +1,6 @@
 import React from 'react'
-import { RiChatAiLine, RiShutDownFill, RiShutDownLine } from 'react-icons/ri'
+import { RiChatAiLine } from 'react-icons/ri'
+import { MdLogout } from "react-icons/md";
 import { signOut } from 'firebase/auth'
 import {auth} from '../firebase/config'
 
@@ -24,9 +25,11 @@ const NavLinks = () => {
               <RiChatAiLine color='#fff'/>
             </button>
               </li>
+
+              
          <li className="">
                         <button onClick={handleLogout} className="lg:text-[28px] text-[22px] cursor-pointer">
-                            <RiShutDownLine color="#fff" />
+                            <MdLogout color="#fff" />
                         </button>
                     </li>
         </ul>
