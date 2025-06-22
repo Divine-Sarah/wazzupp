@@ -2,9 +2,10 @@ import React,{useEffect, useState, useMemo} from 'react'
 import { RiMore2Fill } from 'react-icons/ri'
 import SearchModal from './SearchModal'
 import { formatTimestamp } from '../utils/formatTimeStamp'
-import chatData from '../data/chat'
+// import chatData from '../data/chat'
 import { doc, onSnapshot, collection } from "firebase/firestore";
-import { auth, db, listenForChats} from "../firebase/config";
+import { auth, db} from "../firebase/config";
+import {  listenForChats} from "../firebase/config";
 import defaultAvatar from "../assets/avatar.jpg"
 
 const ChatList = ({ setSelectedUser }) => {
@@ -21,25 +22,25 @@ const ChatList = ({ setSelectedUser }) => {
 
     console.log(user?.fullName);
 
-//     useEffect(() => {
-//   const unsubscribe = listenForChats(setChats);
-//   return () => {
-//     unsubscribe();
-//   };
-// }, []);
-
-
     useEffect(() => {
-  const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
-    const allUsers = snapshot.docs
-      .map((doc) => ({ id: doc.id, ...doc.data() }))
-      .filter((u) => u.uid !== auth.currentUser?.uid); // exclude self
-
-    setChats(allUsers);
-  });
-
-  return () => unsubscribe();
+      const unsubscribe = listenForChats(setChats);
+      return () => {
+        unsubscribe();
+      };
 }, []);
+
+
+//     useEffect(() => {
+//   const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
+//     const allUsers = snapshot.docs
+//       .map((doc) => ({ id: doc.id, ...doc.data() }))
+//       .filter((u) => u.uid !== auth.currentUser?.uid); // exclude self
+
+//     setChats(allUsers);
+//   });
+
+//   return () => unsubscribe();
+// }, []);
 
     const sortedChats = useMemo(() => {
         return [...chats].sort((a, b) => {
@@ -52,6 +53,7 @@ const ChatList = ({ setSelectedUser }) => {
 
      const startChat = (user) => {
         setSelectedUser(user);
+        // alert("chast started")
     };
 
   return (
@@ -60,8 +62,8 @@ const ChatList = ({ setSelectedUser }) => {
         <main className='flex items-center gap-3'>
             <img src={user?.image || defaultAvatar} className="w-[44px] h-[44px] object-cover rounded-full" alt="" />
           <span>
-<h3 className="p-0 font-semibold text-[#2A3D39] md:text-[17px]">{user?.fullName || "ChatFrik user"}</h3>
-                        <p className="p-0 font-light text-[#2A3D39] text-[15px]">@{user?.username || "chatfrik"}</p>
+<h3 className="p-0 font-semibold text-[#2A3D39] md:text-[17px]">{user?.fullName || "WazzUpp user"}</h3>
+                        <p className="p-0 font-light text-[#2A3D39] text-[15px]">@{user?.username || "wazzupp"}</p>
           </span>
         </main>
         <button  className='bg-[#D9F2ED] w-[35px] h-[35px] p-2 flex items-center justify-center rounded-lg'>
@@ -75,7 +77,7 @@ const ChatList = ({ setSelectedUser }) => {
                 </header>
       </div>
 
-                 <main className="flex flex-col items-start mt-[1.5rem] pb-3 custom-scrollbar w-[100%] h-[100%]">
+                 {/* <main className="flex flex-col items-start mt-[1.5rem] pb-3 custom-scrollbar w-[100%] h-[100%]">
               {chats?.map((user) => (
   <button
     key={user.uid}
@@ -92,9 +94,9 @@ const ChatList = ({ setSelectedUser }) => {
   </button>
 ))}
 
-            </main>
+            </main> */}
 
-        {/* <main className="flex flex-col items-start mt-[1.5rem] pb-3 custom-scrollbar w-[100%] h-[100%]">
+        <main className="flex flex-col items-start mt-[1.5rem] pb-3 custom-scrollbar w-[100%] h-[100%]">
                 {sortedChats?.map((chat) => (
                     <button key={chat?.id} className="flex items-start justify-between w-[100%] border-b border-[#9090902c] px-5 pb-3 pt-3">
                         {chat?.users
@@ -113,7 +115,7 @@ const ChatList = ({ setSelectedUser }) => {
                             ))}
                     </button>
                 ))}
-            </main> */}
+            </main>
 
 
     </section>
