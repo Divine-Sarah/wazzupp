@@ -1,18 +1,51 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
-import Chat from './pages/Chat';
+import React, {useEffect, useState} from 'react';
+// import Login from './pages/Login';
+// import Chat from './pages/Chat';
+// import Test from './pages/TestLogin'
+import Register from './pages/Register'
+import Login from './pages/Login-2';
+import Navlinks from "./components/NavLinks"
+import ChatList from './components/ChatList';
+import ChatBox from './components/ChatBox';
+import {auth} from './firebase/config'
 
-function App() {
- 
+
+
+const App = () => {
+ const [isLogin, setIsLogin] = useState(true);
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    const currentUser = auth.currentUser;
+    if (currentUser){
+      setUser(currentUser);
+    }
+
+    const unsubscribe = auth.onAuthStateChanged((user) =>{
+      setUser(user)
+    });
+
+    return () => unsubscribe()
+  },[]);
 
   return (
     <>
-     <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/chat" element={<Chat />} />
-      </Routes>
-    </Router>
+    {user? (
+    <div className='flex lg:flex-row flex-col items-start w-[100%]'>
+      <Navlinks/>
+      <ChatList/>
+      <ChatBox/>
+    </div>
+    ) : (
+  
+       <div>{isLogin ? <Login isLogin={isLogin} setIsLogin={setIsLogin}/> :<Register isLogin={isLogin} setIsLogin={setIsLogin}/> }
+    
+    </div>
+    )}
+  
+
+   
+
     </>
   )
 }
