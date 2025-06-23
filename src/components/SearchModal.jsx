@@ -46,8 +46,8 @@ const SearchModal = ({ startChat }) => {
 
     return (
         <div>
-            <button onClick={openModal} className="bg-[#D9F2ED] w-[35px] h-[35px] p-2 flex items-center justify-center rounded-lg">
-                <RiSearchLine color="#01AA85" className="w-[18px] h-[18px]" />
+            <button onClick={openModal} className="bg-[#023E8A] w-[35px] h-[35px] p-2 flex items-center justify-center rounded-lg">
+                <RiSearchLine color="#fff" className="w-[18px] h-[18px]" />
             </button>
             {isModalOpen && (
                 <div className="fixed inset-0 z-[100] flex justify-center items-center bg-[#00170cb7]" onClick={closeModal}>

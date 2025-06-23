@@ -103,7 +103,7 @@ const Chatbox = ({ selectedUser }) => {
     return (
         <>
             {selectedUser ? (
-                <section className="flex flex-col items-start justify-start h-screen w-[100%] background-image">
+                <section className="flex flex-col items-start justify-start h-screen w-[100%] bg-[#b5e2ff]">
                     <header className="w-[100%] h-[82px] m:h-fit p-4 bg-white">
                         <main className="flex items-center gap-3">
                             <span>
@@ -125,7 +125,7 @@ const Chatbox = ({ selectedUser }) => {
                                             <div className="flex flex-col items-end w-full">
                                                 <span className="flex gap-3 me-10 h-auto">
                                                     <div>
-                                                        <div className="flex items-center bg-white justify-center p-6 rounded-lg shadow-sm">
+                                                        <div className="flex items-center bg-[#92AAFF] rounded-lg  px-4 py-2 shadow-sm">
                                                             <h4>{msg.text}</h4>
                                                         </div>
                                                         <p className="text-gray-400 text-sx mt-3 text-right">{formatTimestamp(msg?.timestamp)}</p>
@@ -137,7 +137,7 @@ const Chatbox = ({ selectedUser }) => {
                                                 <span className="flex gap-3 w-[40%] h-auto ms-10">
                                                     <img src={defaultAvatar} className="h-11 w-11 object-cover rounded-full" alt="" />
                                                     <div>
-                                                        <div className="flex items-center bg-white justify-center p-6 rounded-lg shadow-sm">
+                                                        <div className="flex items-center bg-[#FFCFCF] px-4 py-2 justify-center rounded-lg shadow-sm">
                                                             <h4>{msg.text}</h4>
                                                         </div>
                                                         <p className="text-gray-400 text-sx mt-3">{formatTimestamp(msg?.timestamp)}</p>
@@ -153,18 +153,18 @@ const Chatbox = ({ selectedUser }) => {
                             <form onSubmit={handleSendMessage} action="" className="flex items-center bg-white h-[45px] w-[100%] px-2 rounded-lg relative shadow-lg">
                                 <input value={messageText} onChange={(e) => sendMessageText(e.target.value)} className="h-full text-[#2A3D39] outline-none text-[16px] pl-3 pr-[50px] rounded-lg w-[100%]" type="text" placeholder="Write your message..." />
                                 <button type="submit" className="flex items-center justify-center absolute right-3 p-2 rounded-full bg-[#D9f2ed] hover:bg-[#c8eae3]">
-                                    <RiSendPlaneFill color="#01AA85" />
+                                    <RiSendPlaneFill color="#023E8A" />
                                 </button>
                             </form>
                         </div>
                     </main>
                 </section>
             ) : (
-                <section className="h-screen w-[100%] bg-[#e5f6f3]">
+                <section className="h-screen w-[100%] bg-[#b5e2ff]">
                     <div className="flex flex-col justify-center items-center h-[100vh]">
                        
-                        <h1 className="text-[30px] font-bold text-teal-700 mt-5">Welcome to WazzUpp</h1>
-                        <p className="text-gray-500">Connect and chat with friends easily, securely, fast and free</p>
+                        <h1 className="text-[30px] font-bold text-[#023E8A] mt-5">Welcome to WazzUpp</h1>
+                        <p className="">Connect and chat with friends easily, securely, fast and free</p>
                     </div>
                 </section>
             )}
