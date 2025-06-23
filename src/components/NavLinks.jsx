@@ -13,7 +13,7 @@ const NavLinks = () => {
         }
     };
   return (
-    <section className='sticky lg:static top-0 flex items-center lg:items-start lg:justify-start h-[7vh] lg:h-[100vh] w-[100%] lg:w-[150px] py-8 lg:py-0 bg-[#01AA85]'>
+    <section className='sticky lg:static top-0 flex items-center lg:items-start lg:justify-start h-[7vh] lg:h-[100vh] w-[100%] lg:w-[150px] py-8 lg:py-0 bg-[#023E8A]'>
       <main className='flex lg:flex-col items-center lg:gap-10 justify-between lg:px-0 w-[100%]'>
         <div className='flex items-start justify-center lg:border-b border-b-1 border-[#ffffffb9] p-4 lg:w-[100%]'>
           <span className='alex-brush text-[36px] flex items-center justify-center text-white '>Wazzupp</span>

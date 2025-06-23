@@ -3,7 +3,7 @@ import { RiMore2Fill } from 'react-icons/ri'
 import SearchModal from './SearchModal'
 import { formatTimestamp } from '../utils/formatTimeStamp'
 // import chatData from '../data/chat'
-import { doc, onSnapshot, collection } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { auth, db} from "../firebase/config";
 import {  listenForChats} from "../firebase/config";
 import defaultAvatar from "../assets/avatar.jpg"
@@ -30,17 +30,7 @@ const ChatList = ({ setSelectedUser }) => {
 }, []);
 
 
-//     useEffect(() => {
-//   const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
-//     const allUsers = snapshot.docs
-//       .map((doc) => ({ id: doc.id, ...doc.data() }))
-//       .filter((u) => u.uid !== auth.currentUser?.uid); // exclude self
 
-//     setChats(allUsers);
-//   });
-
-//   return () => unsubscribe();
-// }, []);
 
     const sortedChats = useMemo(() => {
         return [...chats].sort((a, b) => {
@@ -66,8 +56,8 @@ const ChatList = ({ setSelectedUser }) => {
                         <p className="p-0 font-light text-[#2A3D39] text-[15px]">@{user?.username || "wazzupp"}</p>
           </span>
         </main>
-        <button  className='bg-[#D9F2ED] w-[35px] h-[35px] p-2 flex items-center justify-center rounded-lg'>
-          <RiMore2Fill color='#01AA85' className='w-[28px] h-[28px]'/>
+        <button  className='bg-[#023E8A] w-[35px] h-[35px] p-2 flex items-center justify-center rounded-lg'>
+          <RiMore2Fill color='#fff' className='w-[28px] h-[28px]'/>
         </button>
       </header>
       <div className='w-[100%] mt-[10px] px-5'>
@@ -77,24 +67,7 @@ const ChatList = ({ setSelectedUser }) => {
                 </header>
       </div>
 
-                 {/* <main className="flex flex-col items-start mt-[1.5rem] pb-3 custom-scrollbar w-[100%] h-[100%]">
-              {chats?.map((user) => (
-  <button
-    key={user.uid}
-    className="flex items-start justify-between w-full border-b border-[#9090902c] px-5 pb-3 pt-3"
-    onClick={() => startChat(user)}
-  >
-    <div className="flex items-start gap-3">
-      <img src={user.image || defaultAvatar} className="h-[40px] w-[40px] rounded-full object-cover" alt="" />
-      <span>
-        <h2 className="p-0 font-semibold text-[#2A3d39] text-left text-[17px]">{user.fullName || "ChatFrik User"}</h2>
-        <p className="p-0 font-light text-[#2A3d39] text-left text-[14px]">@{user.username || user.email}</p>
-      </span>
-    </div>
-  </button>
-))}
-
-            </main> */}
+                 
 
         <main className="flex flex-col items-start mt-[1.5rem] pb-3 custom-scrollbar w-[100%] h-[100%]">
                 {sortedChats?.map((chat) => (
