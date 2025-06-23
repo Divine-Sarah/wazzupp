@@ -52,10 +52,10 @@ const SearchModal = ({ startChat }) => {
             {isModalOpen && (
                 <div className="fixed inset-0 z-[100] flex justify-center items-center bg-[#00170cb7]" onClick={closeModal}>
                     <div className="relative p-4 w-full max-w-md  max-h-full" onClick={(e) => e.stopPropagation()}>
-                        <div className="relative bg-[#01AA85] w-[100%] rounded-md shadow-lg">
+                        <div className="relative bg-[#3c7dd3] w-[100%] rounded-md shadow-lg">
                             <div className="flex items-center justify-between p-4 md:p-5 border-b border-gray-300">
                                 <h3 className="text-xl font-semibold text-white">Search Chat</h3>
-                                <button onClick={closeModal} className="text-white bg-transparent hover:bg-[#d9f2ed] hover:text-[#01AA85] rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
+                                <button onClick={closeModal} className="text-white bg-transparent hover:bg-[#d9f2ed] hover:text-[#023E8A] rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
                                     <FaXmark size={20} />
                                 </button>
                             </div>
@@ -63,7 +63,7 @@ const SearchModal = ({ startChat }) => {
                                 <div className="space-y-4">
                                     <div className="flex gap-2">
                                         <input onChange={(e) => setSearchTerm(e.target.value)} type="text" className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg outline-none w-full p-2.5" placeholder="Search users" />
-                                        <button onClick={handleSearch} className="bg-green-900 text-white px-3 py-2 rounded-lg">
+                                        <button onClick={handleSearch} className="bg-[#023E8A] text-white px-3 py-2 rounded-lg">
                                             <FaSearch />
                                         </button>
                                     </div>
