@@ -48,6 +48,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import defaultAvatar from "../assets/avatar.jpg";
 import { formatTimestamp } from "../utils/formatTimeStamp";
 import { RiSendPlaneFill } from "react-icons/ri";
+import {FaPaperclip} from "react-icons/fa"
 // import { messageData } from "../data/messageData";
 import { auth, listenForMessages, sendMessage } from "../firebase/config";
 
@@ -84,6 +85,31 @@ const Chatbox = ({ selectedUser }) => {
             return aTimestamp - bTimestamp;
         });
     }, [messages]);
+
+    const handleImageChange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = () => {
+    const base64 = reader.result;
+
+    const newMessage = {
+      sender: senderEmail,
+      image: base64,
+      timestamp: {
+        seconds: Math.floor(Date.now() / 1000),
+        nanoseconds: 0,
+      },
+    };
+
+    sendMessage(base64, chatId, user1?.uid, user2?.uid, "image"); // 👈 "image" type
+    setMessages((prev) => [...prev, newMessage]);
+  };
+  reader.onerror = (error) => console.error("File error:", error);
+};
+
 
     const handleSendMessage = (e) => {
         e.preventDefault();
@@ -125,9 +151,15 @@ const Chatbox = ({ selectedUser }) => {
                                             <div className="flex flex-col items-end w-full">
                                                 <span className="flex gap-3 me-10 h-auto">
                                                     <div>
-                                                        <div className="flex items-center bg-[#92AAFF] rounded-lg  px-4 py-2 shadow-sm">
-                                                            <h4>{msg.text}</h4>
-                                                        </div>
+                                                        <div className="flex items-center bg-[#92AAFF] text-wrap rounded-lg px-4 py-2 shadow-sm">
+          {msg?.type === "image" ? (
+  <img src={msg.content} alt="sent" className="w-[150px] h-auto rounded-lg" />
+) : (
+  <h4>{msg.content || msg.text}</h4> // fallback to msg.text for older messages
+)}
+
+
+        </div>
                                                         <p className="text-gray-400 text-sx mt-3 text-right">{formatTimestamp(msg?.timestamp)}</p>
                                                     </div>
                                                 </span>
@@ -137,9 +169,17 @@ const Chatbox = ({ selectedUser }) => {
                                                 <span className="flex gap-3 w-[40%] h-auto ms-10">
                                                     <img src={defaultAvatar} className="h-11 w-11 object-cover rounded-full" alt="" />
                                                     <div>
-                                                        <div className="flex items-center bg-[#FFCFCF] px-4 py-2 justify-center rounded-lg shadow-sm">
-                                                            <h4>{msg.text}</h4>
-                                                        </div>
+                                                         <div className="flex items-center bg-[#FFCFCF] px-4 py-2  rounded-lg shadow-sm">
+         {msg?.type === "image" ? (
+  <img src={msg.content} alt="sent" className="w-[150px] h-auto rounded-lg" />
+) : (
+  <h4>{msg.content || msg.text}</h4> // fallback to msg.text for older messages
+)}
+
+
+
+
+        </div>
                                                         <p className="text-gray-400 text-sx mt-3">{formatTimestamp(msg?.timestamp)}</p>
                                                     </div>
                                                 </span>
@@ -151,6 +191,21 @@ const Chatbox = ({ selectedUser }) => {
                         </section>
                         <div className="sticky lg:bottom-0 bottom-[60px] p-3 h-fit w-[100%]">
                             <form onSubmit={handleSendMessage} action="" className="flex items-center bg-white h-[45px] w-[100%] px-2 rounded-lg relative shadow-lg">
+                                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                  id="image-upload"
+                //   disabled={isSending}
+                 title="Upload image"
+                />
+                <label
+                  htmlFor="image-upload"
+                  className="p-2 cursor-pointer hover:bg-gray-200 rounded-full"
+                >
+                  <FaPaperclip color="#023E8A" />
+                </label>
                                 <input value={messageText} onChange={(e) => sendMessageText(e.target.value)} className="h-full text-[#2A3D39] outline-none text-[16px] pl-3 pr-[50px] rounded-lg w-[100%]" type="text" placeholder="Write your message..." />
                                 <button type="submit" className="flex items-center justify-center absolute right-3 p-2 rounded-full bg-[#D9f2ed] hover:bg-[#c8eae3]">
                                     <RiSendPlaneFill color="#023E8A" />
