@@ -62,6 +62,8 @@ const Chatbox = ({ selectedUser }) => {
     const user1 = auth?.currentUser;
     const user2 = selectedUser;
     const senderEmail = auth?.currentUser?.email;
+    const localTimestamp = Date.now();
+
 
     console.log(typeof chatId);
     console.log(user1);
@@ -77,14 +79,21 @@ const Chatbox = ({ selectedUser }) => {
         }
     }, [messages]);
 
-    const sortedMessages = useMemo(() => {
-        return [...messages].sort((a, b) => {
-            const aTimestamp = a?.timestamp?.seconds + a?.timestamp?.nanoseconds / 1e9;
-            const bTimestamp = b?.timestamp?.seconds + b?.timestamp?.nanoseconds / 1e9;
+   const sortedMessages = useMemo(() => {
+  return [...messages].sort((a, b) => {
+    const aTime = a?.timestamp?.seconds
+      ? a.timestamp.seconds * 1000 + Math.floor(a.timestamp.nanoseconds / 1e6)
+      : a?.localTimestamp || 0;
 
-            return aTimestamp - bTimestamp;
-        });
-    }, [messages]);
+    const bTime = b?.timestamp?.seconds
+      ? b.timestamp.seconds * 1000 + Math.floor(b.timestamp.nanoseconds / 1e6)
+      : b?.localTimestamp || 0;
+
+    return aTime - bTime;
+  });
+}, [messages]);
+
+
 
     const handleImageChange = async (e) => {
   const file = e.target.files[0];
@@ -96,12 +105,8 @@ const Chatbox = ({ selectedUser }) => {
     const base64 = reader.result;
 
     const newMessage = {
-      sender: senderEmail,
-      image: base64,
-      timestamp: {
-        seconds: Math.floor(Date.now() / 1000),
-        nanoseconds: 0,
-      },
+       sender: senderEmail,
+  localTimestamp,
     };
 
     sendMessage(base64, chatId, user1?.uid, user2?.uid, "image"); // 👈 "image" type
@@ -116,10 +121,7 @@ const Chatbox = ({ selectedUser }) => {
         const newMessage = {
             sender: senderEmail,
             text: messageText,
-            timestamp: {
-                seconds: Math.floor(Date.now() / 1000),
-                nanoseconds: 0,
-            },
+            localTimestamp,
         };
 
         sendMessage(messageText, chatId, user1?.uid, user2?.uid);
@@ -169,7 +171,7 @@ const Chatbox = ({ selectedUser }) => {
                                                 <span className="flex gap-3 w-[40%] h-auto ms-10">
                                                     <img src={defaultAvatar} className="h-11 w-11 object-cover rounded-full" alt="" />
                                                     <div>
-                                                         <div className="flex items-center bg-[#FFCFCF] px-4 py-2  rounded-lg shadow-sm">
+                                                         <div className="flex items-center bg-[#FFCFCF] px-4 py-2 justify-center rounded-lg shadow-sm">
          {msg?.type === "image" ? (
   <img src={msg.content} alt="sent" className="w-[150px] h-auto rounded-lg" />
 ) : (
