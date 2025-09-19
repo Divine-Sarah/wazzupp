@@ -44,6 +44,7 @@ export const sendMessage = async (messageContent, chatId, user1, user2, type = "
 
   const user1Data = user1Doc.data();
   const user2Data = user2Doc.data();
+  const localTimestamp = Date.now();
 
   const chatDoc = await getDoc(chatRef);
   if (!chatDoc.exists()) {
@@ -62,10 +63,11 @@ export const sendMessage = async (messageContent, chatId, user1, user2, type = "
   const messageRef = collection(db, "chats", chatId, "messages");
 
   await addDoc(messageRef, {
-    content: messageContent, // base64 string or plain text
+    content: messageContent, 
     type, // "text" or "image"
-    sender: auth.currentUser.email,
-    timestamp: serverTimestamp(),
+     sender: auth.currentUser.email,
+     localTimestamp,
+     timestamp: serverTimestamp(),  // Firestore timestamp
   });
 };
 
